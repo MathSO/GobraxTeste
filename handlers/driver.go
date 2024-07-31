@@ -21,23 +21,23 @@ func ListDrivers(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	var drivers = make([]models.Driver, 0)
+	var drivers = make([]models.Model, 0)
 	for rows.Next() {
-		var d models.Driver
+		var id, name, cnh string
 
-		err := rows.Scan(&d.ID, &d.Name, &d.CNH)
+		err := rows.Scan(&id, &name, &cnh)
 		if err != nil {
 			return echo.ErrInternalServerError
 		}
 
-		drivers = append(drivers, d)
+		drivers = append(drivers, models.NewDriver(id, name, cnh))
 	}
 
 	return ctx.JSON(200, drivers)
 }
 
 func CreateDriver(ctx echo.Context) error {
-	var d models.Driver
+	var d = models.NewDriver("", "", "")
 	if err := json.NewDecoder(ctx.Request().Body).Decode(&d); err != nil {
 		return echo.ErrBadRequest
 	}
@@ -47,7 +47,7 @@ func CreateDriver(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.InsertDriver(mysqlConnection, &d)
+	err = d.Insert(mysqlConnection)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "CNH já cadastrada na base"})
 	}
@@ -56,14 +56,13 @@ func CreateDriver(ctx echo.Context) error {
 }
 
 func GetDriver(ctx echo.Context) error {
-	id := ctx.Param(`id`)
-
 	mysqlConnection, err := factory.GetConnection()
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	d, err := models.RetrieveDriver(mysqlConnection, id)
+	var d = models.NewDriver("", "", "")
+	err = d.Load(mysqlConnection, ctx.Param(`id`))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Driver não encontrado na base"})
@@ -76,18 +75,19 @@ func GetDriver(ctx echo.Context) error {
 }
 
 func UpdateDriver(ctx echo.Context) error {
-	var d models.Driver
+	var d = models.NewDriver("", "", "")
 	if err := json.NewDecoder(ctx.Request().Body).Decode(&d); err != nil {
 		return echo.ErrBadRequest
 	}
-	d.ID = ctx.Param(`id`)
+
+	models.SetAttribute(d, "ID", ctx.Param(`id`))
 
 	mysqlConnection, err := factory.GetConnection()
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.UpdateDriver(mysqlConnection, d)
+	err = d.Update(mysqlConnection)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Driver não encontrado na base"})
@@ -100,14 +100,13 @@ func UpdateDriver(ctx echo.Context) error {
 }
 
 func DeleteDriver(ctx echo.Context) error {
-	id := ctx.Param(`id`)
-
 	mysqlConnection, err := factory.GetConnection()
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.DeleteDriver(mysqlConnection, id)
+	var d = models.NewDriver(ctx.Param(`id`), "", "")
+	err = d.Delete(mysqlConnection)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return echo.ErrBadRequest

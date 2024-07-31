@@ -16,6 +16,7 @@ RUN go build -o entrypoint main.go
 FROM alpine:3.19
 
 WORKDIR /app
+
 COPY --from=build_fase /app/entrypoint ./entrypoint
 
 CMD [ "./entrypoint" ]

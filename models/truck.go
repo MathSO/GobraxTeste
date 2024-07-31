@@ -4,36 +4,44 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/MathSO/GobraxTeste/factory"
 	"github.com/google/uuid"
 )
 
 const TruckTableName = `truck`
 
-type Truck struct {
-	ID    string `json:"id" insert:"id"`
-	Model string `json:"model" insert:"model"`
-	Plate string `json:"plate" insert:"plate"`
+type truck struct {
+	ID    string `json:"id"`
+	Brand string `json:"brand"`
+	Plate string `json:"plate"`
 }
 
-func InsertTruck(mysqlConnection *sql.DB, t *Truck) error {
+func NewTruck(id, brand, plate string) Model {
+	return &truck{
+		ID:    id,
+		Brand: brand,
+		Plate: plate,
+	}
+}
+
+func (t *truck) Insert(mysqlConnection *sql.DB) error {
 	t.ID = uuid.NewString()
-	_, err := factory.Insert(mysqlConnection, *t, TruckTableName)
+
+	query := fmt.Sprintf("INSERT INTO `%s` (`id`, `brand`, `plate`) VALUES (?, ?, ?)", TruckTableName)
+	_, err := mysqlConnection.Exec(query, t.ID, t.Brand, t.Plate)
+
 	return err
 }
 
-func RetrieveTruck(mysqlConnection *sql.DB, id string) (Truck, error) {
-	var t Truck
+func (t *truck) Load(mysqlConnection *sql.DB, id string) error {
+	query := fmt.Sprintf("SELECT `id`, `brand`, `plate` FROM `%s` WHERE `id` = ?", TruckTableName)
+	err := mysqlConnection.QueryRow(query, id).Scan(&t.ID, &t.Brand, &t.Plate)
 
-	query := fmt.Sprintf("SELECT * FROM `%s` WHERE `id` = ?", TruckTableName)
-	err := mysqlConnection.QueryRow(query, id).Scan(&t.ID, &t.Model, &t.Plate)
-
-	return t, err
+	return err
 }
 
-func UpdateTruck(mysqlConnection *sql.DB, d Truck) error {
-	query := fmt.Sprintf("UPDATE `%s` SET `model` = ?, `plate` = ? WHERE `id` = ?", TruckTableName)
-	result, err := mysqlConnection.Exec(query, d.Model, d.Plate, d.ID)
+func (t truck) Update(mysqlConnection *sql.DB) error {
+	query := fmt.Sprintf("UPDATE `%s` SET `brand` = ?, `plate` = ? WHERE `id` = ?", TruckTableName)
+	result, err := mysqlConnection.Exec(query, t.Brand, t.Plate, t.ID)
 	if err != nil {
 		return err
 	}
@@ -46,8 +54,12 @@ func UpdateTruck(mysqlConnection *sql.DB, d Truck) error {
 	return err
 }
 
-func DeleteTruck(mysqlConnection *sql.DB, id string) error {
+func (t truck) Delete(mysqlConnection *sql.DB) error {
 	query := fmt.Sprintf("DELETE FROM `%s` WHERE `id` = ?", TruckTableName)
-	_, err := mysqlConnection.Exec(query, id)
+	_, err := mysqlConnection.Exec(query, t.ID)
 	return err
+}
+
+func (t truck) GetID() []string {
+	return []string{t.ID}
 }

@@ -9,7 +9,7 @@ import (
 
 func getMysqlConnection() (*sql.DB, error) {
 	config := mysql.NewConfig()
-	config.Addr = "172.17.236.222"
+	config.Addr = "10.1.0.207"
 	config.User = "root"
 	config.Passwd = "example"
 	config.DBName = "gobrax"
@@ -24,23 +24,17 @@ func TestDriverCreationSuccessAndDelete(t *testing.T) {
 		t.Skip()
 	}
 
-	testes := []Driver{
-		{
-			Name: "Joao",
-			CNH:  "53242343224",
-		},
-		{
-			Name: "Joao",
-			CNH:  "53342525235",
-		},
+	testes := []Model{
+		NewDriver("", "Joao", "53242343224"),
+		NewDriver("", "Joao", "53342525235"),
 	}
 
 	for _, d := range testes {
-		if err := InsertDriver(conn, &d); err != nil {
+		if err := d.Insert(conn); err != nil {
 			t.Fatal(err)
 		}
 
-		DeleteDriver(conn, d.ID)
+		d.Delete(conn)
 	}
 }
 
@@ -50,21 +44,24 @@ func TestDriverCreationFailure(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Driver{
-		Name: "Joao",
-		CNH:  "53242343224",
-	}
-	b := Driver{
-		Name: "Joao",
-		CNH:  "53242343224",
-	}
+	a := NewDriver(
+		"",
+		"Joao",
+		"53242343224",
+	)
 
-	if err := InsertDriver(conn, &a); err != nil {
+	b := NewDriver(
+		"",
+		"Joao",
+		"53242343224",
+	)
+
+	if err := a.Insert(conn); err != nil {
 		t.Fail()
 	}
-	defer DeleteDriver(conn, a.ID)
+	defer a.Delete(conn)
 
-	if err := InsertDriver(conn, &b); err == nil {
+	if err := b.Insert(conn); err == nil {
 		t.Fail()
 	}
 }
@@ -75,19 +72,20 @@ func TestDriverUpdateSuccess(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Driver{
-		Name: "Joao",
-		CNH:  "53242343224",
-	}
+	a := NewDriver(
+		"",
+		"Joao",
+		"53242343224",
+	)
 
-	if err := InsertDriver(conn, &a); err != nil {
+	if err := a.Insert(conn); err != nil {
 		t.Fail()
 	}
-	defer DeleteDriver(conn, a.ID)
+	defer a.Delete(conn)
 
-	a.CNH = "53242433224"
+	SetAttribute(a, "CNH", "53242433224")
 
-	if err := UpdateDriver(conn, a); err != nil {
+	if err := a.Update(conn); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -98,13 +96,13 @@ func TestDriverUpdateFailure(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Driver{
-		ID:   "12345",
-		Name: "Joao",
-		CNH:  "53242343224",
-	}
+	a := NewDriver(
+		"12345",
+		"Joao",
+		"53242343224",
+	)
 
-	if err := UpdateDriver(conn, a); err == nil {
+	if err := a.Update(conn); err == nil {
 		t.Fail()
 	}
 }

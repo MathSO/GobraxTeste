@@ -10,23 +10,17 @@ func TestTruckCreationSuccessAndDelete(t *testing.T) {
 		t.Skip()
 	}
 
-	testes := []Truck{
-		{
-			Model: "VOLVO FH-540 GLOBETROTTER 6X4",
-			Plate: "BBB1234",
-		},
-		{
-			Model: "VOLVO FH-540 6x4",
-			Plate: "AAA4444",
-		},
+	testes := []Model{
+		NewTruck("", "VOLVO FH-540 GLOBETROTTER 6X4", "BBB1234"),
+		NewTruck("", "VOLVO FH-540 6x4", "AAA4444"),
 	}
 
 	for _, d := range testes {
-		if err := InsertTruck(conn, &d); err != nil {
+		if err := d.Insert(conn); err != nil {
 			t.Fatal(err)
 		}
 
-		DeleteTruck(conn, d.ID)
+		d.Delete(conn)
 	}
 }
 
@@ -36,21 +30,24 @@ func TestTruckCreationFailure(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Truck{
-		Model: "VOLVO FH-540 GLOBETROTTER 6X4",
-		Plate: "BBB1234",
-	}
-	b := Truck{
-		Model: "VOLVO FH-540 GLOBETROTTER 6X4",
-		Plate: "BBB1234",
-	}
+	a := NewTruck(
+		"",
+		"VOLVO FH-540 GLOBETROTTER 6X4",
+		"BBB1234",
+	)
 
-	if err := InsertTruck(conn, &a); err != nil {
+	b := NewTruck(
+		"",
+		"VOLVO FH-540 GLOBETROTTER 6X4",
+		"BBB1234",
+	)
+
+	if err := a.Insert(conn); err != nil {
 		t.Fatal(err)
 	}
-	defer DeleteTruck(conn, a.ID)
+	defer a.Delete(conn)
 
-	if err := InsertTruck(conn, &b); err == nil {
+	if err := b.Insert(conn); err == nil {
 		t.Fail()
 	}
 }
@@ -61,19 +58,16 @@ func TestTruckUpdateSuccess(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Truck{
-		Model: "VOLVO FH-540 GLOBETROTTER 6X4",
-		Plate: "BBB1234",
-	}
+	a := NewTruck("", "VOLVO FH-540 GLOBETROTTER 6X4", "BBB1234")
 
-	if err := InsertTruck(conn, &a); err != nil {
+	if err := a.Insert(conn); err != nil {
 		t.Fatal(err)
 	}
-	defer DeleteTruck(conn, a.ID)
+	defer a.Delete(conn)
 
-	a.Model = "VOLVO FH-540 6x4"
+	SetAttribute(a, "Brand", "VOLVO FH-540 6x4")
 
-	if err := UpdateTruck(conn, a); err != nil {
+	if err := a.Update(conn); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -84,13 +78,34 @@ func TestTruckUpdateFailure(t *testing.T) {
 		t.Skip()
 	}
 
-	a := Truck{
-		ID:    "12345",
-		Model: "VOLVO FH-540 GLOBETROTTER 6X4",
-		Plate: "BBB1234",
-	}
+	a := NewTruck(
+		"12345",
+		"VOLVO FH-540 GLOBETROTTER 6X4",
+		"BBB1234",
+	)
 
-	if err := UpdateTruck(conn, a); err == nil {
+	if err := a.Update(conn); err == nil {
 		t.Fail()
 	}
+}
+
+func TestTruckSetAttribute(t *testing.T) {
+	truck := NewTruck("", "", "")
+
+	err := SetAttribute(truck, "ID", "12345153")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = SetAttribute(truck, "Brand", "Caminhao")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = SetAttribute(truck, "Plate", "aaa1234")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(truck)
 }

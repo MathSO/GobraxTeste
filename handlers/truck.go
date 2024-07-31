@@ -21,16 +21,16 @@ func ListTrucks(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	var trucks = make([]models.Truck, 0)
+	var trucks = make([]models.Model, 0)
 	for rows.Next() {
-		var t models.Truck
+		var id, model, plate string
 
-		err := rows.Scan(&t.ID, &t.Model, &t.Plate)
+		err := rows.Scan(&id, &model, &plate)
 		if err != nil {
 			return echo.ErrInternalServerError
 		}
 
-		trucks = append(trucks, t)
+		trucks = append(trucks, models.NewTruck(id, model, plate))
 	}
 
 	return ctx.JSON(200, trucks)
@@ -38,7 +38,7 @@ func ListTrucks(ctx echo.Context) error {
 
 // CreateTruks creates a Truks
 func CreateTruck(ctx echo.Context) error {
-	var t models.Truck
+	var t = models.NewTruck("", "", "")
 	if err := json.NewDecoder(ctx.Request().Body).Decode(&t); err != nil {
 		return echo.ErrBadRequest
 	}
@@ -48,7 +48,7 @@ func CreateTruck(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.InsertTruck(mysqlConnection, &t)
+	err = t.Insert(mysqlConnection)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Placa já cadastrada na base"})
 	}
@@ -65,7 +65,8 @@ func GetTruck(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	t, err := models.RetrieveTruck(mysqlConnection, id)
+	var t = models.NewTruck("", "", "")
+	err = t.Load(mysqlConnection, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Caminhão não encontrado na base"})
@@ -79,18 +80,17 @@ func GetTruck(ctx echo.Context) error {
 
 // UpdateTruks updates a Truks
 func UpdateTruck(ctx echo.Context) error {
-	var t models.Truck
+	var t = models.NewTruck(ctx.Param(`id`), "", "")
 	if err := json.NewDecoder(ctx.Request().Body).Decode(&t); err != nil {
 		return echo.ErrBadRequest
 	}
-	t.ID = ctx.Param(`id`)
 
 	mysqlConnection, err := factory.GetConnection()
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.UpdateTruck(mysqlConnection, t)
+	err = t.Update(mysqlConnection)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Caminhão não encontrado na base"})
@@ -104,14 +104,14 @@ func UpdateTruck(ctx echo.Context) error {
 
 // DeleteTruks deletes a Truks
 func DeleteTruck(ctx echo.Context) error {
-	id := ctx.Param(`id`)
-
 	mysqlConnection, err := factory.GetConnection()
 	if err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	err = models.DeleteTruck(mysqlConnection, id)
+	var t = models.NewTruck(ctx.Param(`id`), "", "")
+
+	err = t.Delete(mysqlConnection)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return echo.ErrBadRequest

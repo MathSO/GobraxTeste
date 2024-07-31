@@ -13,7 +13,7 @@ CREATE TABLE `driver` (
 
 CREATE TABLE `truck` (
   `id` varchar(36) NOT NULL,
-  `model` varchar(100) NOT NULL,
+  `brand` varchar(100) NOT NULL,
   `plate` varchar(7) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
