@@ -7,8 +7,10 @@ COPY main.go ./main.go
 COPY go.mod ./go.mod
 COPY go.sum ./go.sum
 COPY handlers ./handlers
+COPY factory ./factory
+COPY models ./models
 
-RUN go get all
+RUN go mod download
 RUN go build -o entrypoint main.go
 
 FROM alpine:3.19

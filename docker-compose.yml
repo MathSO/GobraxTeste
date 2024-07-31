@@ -13,9 +13,9 @@ services:
       retries: 10
       start_period: 10s
     environment:
-      - MYSQL_HOSTNAME=${MYSQL_PASSWORD}
+      - MYSQL_HOSTNAME=mysql:3306
       - MYSQL_USERNAME=root
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=gobrax
     depends_on:
       mysql:

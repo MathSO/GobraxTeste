@@ -10,11 +10,13 @@ import (
 
 	"github.com/MathSO/GobraxTeste/handlers"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	// Initiate handler
 	handler := echo.New()
+	handler.Pre(middleware.CORS())
 
 	addDriversRoutes(handler)
 	addTrucksRoutes(handler)
@@ -35,7 +37,6 @@ func main() {
 	}()
 
 	// Start server
-	fmt.Println("Listener ready")
 	if err := handler.Start(":8080"); err != nil {
 		panic(err)
 	}
