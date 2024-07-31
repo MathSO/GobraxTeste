@@ -20,6 +20,7 @@ func main() {
 
 	addDriversRoutes(handler)
 	addTrucksRoutes(handler)
+	addDriverTruckRoutes(handler)
 
 	// Gracefull shutdown
 	go func() {
@@ -64,4 +65,14 @@ func addTrucksRoutes(handler *echo.Echo) {
 	truck.GET("/:id", handlers.GetTruck)
 	truck.PUT("/:id", handlers.UpdateTruck)
 	truck.DELETE("/:id", handlers.DeleteTruck)
+}
+
+func addDriverTruckRoutes(handler *echo.Echo) {
+	handler.GET("/drivertrucks", handlers.ListDriversTruck)
+
+	driverTruck := handler.Group("/drivertruck")
+
+	driverTruck.POST("", handlers.CreateDriverTruck)
+	driverTruck.GET("/:driver_id/:truck_id", handlers.GetDriverTruck)
+	driverTruck.DELETE("/:driver_id/:truck_id", handlers.DeleteDriverTruck)
 }

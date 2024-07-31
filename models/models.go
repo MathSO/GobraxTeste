@@ -8,7 +8,7 @@ import (
 
 type Model interface {
 	Insert(*sql.DB) error
-	Load(conn *sql.DB, id string) error
+	Load(conn *sql.DB, id ...string) error
 	Update(conn *sql.DB) error
 	Delete(*sql.DB) error
 	GetID() []string

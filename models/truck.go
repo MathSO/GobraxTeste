@@ -32,9 +32,9 @@ func (t *truck) Insert(mysqlConnection *sql.DB) error {
 	return err
 }
 
-func (t *truck) Load(mysqlConnection *sql.DB, id string) error {
+func (t *truck) Load(mysqlConnection *sql.DB, id ...string) error {
 	query := fmt.Sprintf("SELECT `id`, `brand`, `plate` FROM `%s` WHERE `id` = ?", TruckTableName)
-	err := mysqlConnection.QueryRow(query, id).Scan(&t.ID, &t.Brand, &t.Plate)
+	err := mysqlConnection.QueryRow(query, id[0]).Scan(&t.ID, &t.Brand, &t.Plate)
 
 	return err
 }

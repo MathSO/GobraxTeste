@@ -32,9 +32,9 @@ func (d *driver) Insert(mysqlConnection *sql.DB) error {
 	return err
 }
 
-func (d *driver) Load(mysqlConnection *sql.DB, id string) error {
+func (d *driver) Load(mysqlConnection *sql.DB, id ...string) error {
 	query := fmt.Sprintf("SELECT * FROM `%s` WHERE `id` = ?", DriverTableName)
-	err := mysqlConnection.QueryRow(query, id).Scan(&d.ID, &d.Name, &d.CNH)
+	err := mysqlConnection.QueryRow(query, id[0]).Scan(&d.ID, &d.Name, &d.CNH)
 
 	return err
 }
