@@ -15,7 +15,7 @@ Para subir somente o MySQL ou o Entrpoint deve-se colocar o nome do serviço (my
     sudo docker compose up entrypoint
 
 ## Endpoints criados
-Existe um arquivo com uma colection do Postman que pode ser importada com o nome de Gobrax.postman_collection.json na pasta root do repositório, nela contém todos os endpoints já incluidos e deve somente ser criado uma variável com o host. Ex: https://localhost:8080
+Existe um arquivo com uma colection do Postman que pode ser importada com o nome de Gobrax.postman_collection.json na pasta root do repositório, nela contém todos os endpoints já incluidos e deve somente ser criado uma variável com o host. Ex: http://localhost:8080
 
 Para CRUD do motorista foram criados os endpoints:
 - 	**GET** /drivers - Listagem de todos os motoristas paginado (aceita campos query _page_ e _per_page_)
