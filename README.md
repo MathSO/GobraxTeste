@@ -32,7 +32,7 @@ Para CRUD do caminhão foram criados os endpoints:
 -	**DELETE** /truck/:id - Delete de um caminhão
 
 Para CRUD da relação caminhão com motorista foram criados os endpoints:
-- 	**GET** /trucks - Listagem de todos as relações paginado (aceita campos query _page_ e _per_page_)
--	**POST** /truck - Cadastro de uma nova relação, deve receber um corpo no formato json com identificadores válidos Ex: {"driver_id": "3c993bd1-34c9-4cd6-a2b8-6b122a2f5767","truck_id": "02027a95-32af-48f9-a03d-ec29426a3ed9"}
--	**GET** /truck/:id - Pegar informações de uma relação, aceita variável com o identificador no caminho
--	**DELETE** /truck/:id - Delete de uma relação
+- 	**GET** /drivertrucks - Listagem de todos as relações paginado (aceita campos query _page_ e _per_page_)
+-	**POST** /drivertruck - Cadastro de uma nova relação, deve receber um corpo no formato json com identificadores válidos Ex: {"driver_id": "3c993bd1-34c9-4cd6-a2b8-6b122a2f5767","truck_id": "02027a95-32af-48f9-a03d-ec29426a3ed9"}
+-	**GET** /drivertruck/:id - Pegar informações de uma relação, aceita variável com o identificador no caminho
+-	**DELETE** /drivertruck/:id - Delete de uma relação
