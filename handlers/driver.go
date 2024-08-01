@@ -65,7 +65,7 @@ func GetDriver(ctx echo.Context) error {
 	err = d.Load(mysqlConnection, ctx.Param(`id`))
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Driver não encontrado na base"})
+			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Motorista não encontrado na base"})
 		}
 
 		return echo.ErrBadRequest
@@ -90,7 +90,7 @@ func UpdateDriver(ctx echo.Context) error {
 	err = d.Update(mysqlConnection)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Driver não encontrado na base"})
+			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Motorista não encontrado na base"})
 		}
 
 		return echo.ErrBadRequest
@@ -113,5 +113,5 @@ func DeleteDriver(ctx echo.Context) error {
 		}
 	}
 
-	return ctx.JSON(200, map[string]any{"message": "Driver deletado com sucesso"})
+	return ctx.JSON(200, map[string]any{"message": "Motorista deletado com sucesso"})
 }

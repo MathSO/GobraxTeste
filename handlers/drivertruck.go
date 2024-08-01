@@ -21,7 +21,7 @@ func ListDriversTruck(ctx echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	var drivers = make([]models.Model, 0)
+	var driverTrucks = make([]models.Model, 0)
 	for rows.Next() {
 		var idDriver, idTruck string
 
@@ -30,10 +30,10 @@ func ListDriversTruck(ctx echo.Context) error {
 			return echo.ErrInternalServerError
 		}
 
-		drivers = append(drivers, models.NewDriverTruck(idDriver, idTruck))
+		driverTrucks = append(driverTrucks, models.NewDriverTruck(idDriver, idTruck))
 	}
 
-	return ctx.JSON(200, drivers)
+	return ctx.JSON(200, driverTrucks)
 }
 
 func CreateDriverTruck(ctx echo.Context) error {
@@ -49,7 +49,7 @@ func CreateDriverTruck(ctx echo.Context) error {
 
 	err = d.Insert(mysqlConnection)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "CNH já cadastrada na base"})
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Motorista já cadastrado ao caminhão"})
 	}
 
 	return ctx.JSON(200, d)
@@ -65,7 +65,7 @@ func GetDriverTruck(ctx echo.Context) error {
 	err = d.Load(mysqlConnection, ctx.Param(`driver_id`), ctx.Param(`truck_id`))
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Driver não encontrado na base"})
+			return echo.NewHTTPError(http.StatusBadRequest, map[string]any{"message": "Relação caminhão com motorista não encontrada"})
 		}
 
 		return echo.ErrBadRequest
@@ -88,5 +88,5 @@ func DeleteDriverTruck(ctx echo.Context) error {
 		}
 	}
 
-	return ctx.JSON(200, map[string]any{"message": "Driver removido com sucesso"})
+	return ctx.JSON(200, map[string]any{"message": "Relação caminhão com motorista deletado"})
 }

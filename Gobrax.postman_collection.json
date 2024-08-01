@@ -1,0 +1,365 @@
+{
+	"info": {
+		"_postman_id": "10cf06fe-61da-4708-a195-d8de0a5c6c2f",
+		"name": "Gobrax",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33691125"
+	},
+	"item": [
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "List Drivers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/drivers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Driver",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jose Bezerra\",\r\n    \"cnh\": \"12345678901\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/driver",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"driver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Driver",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/driver/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"driver",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a30498a6-fe24-4d89-8328-894e8ac95d5b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Driver",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jose da Serra\",\r\n    \"cnh\": \"12345678901\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/driver/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"driver",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fafafasfas"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Driver",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/driver/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"driver",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a30498a6-fe24-4d89-8328-894e8ac95d5b"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Truck",
+			"item": [
+				{
+					"name": "List Trucks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/trucks",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"trucks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Truck",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"VOLVO VM 220 4X2\",\r\n    \"plate\": \"BBB1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/truck",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"truck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Truck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/truck/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"truck",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "e6d9132c-8b64-4a44-9fac-25479dba252e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Truck",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/driver/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"driver",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Truck",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/truck/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"truck",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9e658bcd-c814-4ad9-84e1-9349682fc1ec"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Driver Truck",
+			"item": [
+				{
+					"name": "List Driver Trucks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/drivertrucks",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"drivertrucks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Truck",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"driver_id\": \"3c993bd1-34c9-4cd6-a2b8-6b122a2f5767\",\r\n    \"truck_id\": \"02027a95-32af-48f9-a03d-ec29426a3ed9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/drivertruck",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"drivertruck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Truck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/drivertruck/:driver_id/:truck_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"drivertruck",
+								":driver_id",
+								":truck_id"
+							],
+							"variable": [
+								{
+									"key": "driver_id",
+									"value": "3c993bd1-34c9-4cd6-a2b8-6b122a2f5767"
+								},
+								{
+									"key": "truck_id",
+									"value": "02027a95-32af-48f9-a03d-ec29426a3ed9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Truck",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/drivertruck/:driver_id/:truck_id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"drivertruck",
+								":driver_id",
+								":truck_id"
+							],
+							"variable": [
+								{
+									"key": "driver_id",
+									"value": "3c993bd1-34c9-4cd6-a2b8-6b122a2f5767"
+								},
+								{
+									"key": "truck_id",
+									"value": "02027a95-32af-48f9-a03d-ec29426a3ed9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
